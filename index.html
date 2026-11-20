@@ -1,114 +1,213 @@
 <!DOCTYPE html>
-<html lang='en'>
-  <head>
-    <meta charset="utf-8"/>
-    <title>Meme</title>
-  </head>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meme</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7fb; --surface:#ffffff; --fg:#191b24; --muted:#6a6f82; --line:#e3e5ee;
+  --accent:#ff4f7b; --accent-ink:#ffffff; --chip:#eceef6;
+  --display:"Bricolage Grotesque",system-ui,sans-serif; --body:Inter,system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12131a; --surface:#1b1d27; --fg:#eceef6; --muted:#9298ad; --line:#2b2e3c; --accent:#ff6a90; --accent-ink:#12131a; --chip:#242735; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;padding-left:16px;padding-right:16px}
+header.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;flex-direction:column;gap:12px;padding-block:16px 12px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:800;font-size:28px;margin:0;letter-spacing:-.02em}
+h1 span{color:var(--accent)}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.search{flex:1 1 260px;min-width:0;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 12px}
+.search input{flex:1;min-width:0;border:0;background:transparent;color:var(--fg);font:inherit;padding:10px 0;outline:none}
+.search:focus-within{border-color:var(--accent)}
+kbd{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.chip{flex:none;border:0;background:var(--chip);color:var(--fg);font:500 13px var(--body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.chip:focus-visible,.tile:focus-visible,.btn:focus-visible,.kao:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main .wrap{padding-block:20px 48px;display:flex;flex-direction:column;gap:28px}
+.kaos{display:flex;flex-wrap:wrap;gap:6px}
+.kao{border:1px dashed var(--line);background:var(--surface);color:var(--fg);font:15px var(--mono);padding:6px 10px;border-radius:8px;cursor:pointer}
+.kao:hover{border-color:var(--accent)}
+h2{font-family:var(--display);font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.tile{position:relative;padding:0;border:0;background:var(--surface);border-radius:10px;overflow:hidden;cursor:pointer;text-align:left;color:var(--fg);display:flex;flex-direction:column}
+.tile img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:var(--chip);transition:transform .15s}
+.tile:hover img{transform:scale(1.04)}
+.tile .name{font-size:12px;padding:6px 8px 8px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gif{position:absolute;top:6px;left:6px;font:600 10px var(--mono);background:var(--accent);color:var(--accent-ink);padding:2px 5px;border-radius:4px}
+.empty{color:var(--muted);padding:40px 0;text-align:center}
+.links a{color:var(--fg)}
+.shade{position:fixed;inset:0;background:rgb(0 0 0 / .45);z-index:20}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);z-index:21;display:flex;flex-direction:column;gap:14px;padding:20px;overflow-y:auto;box-shadow:-8px 0 30px rgb(0 0 0 / .2)}
+.panel img{width:100%;border-radius:10px}
+.panel h3{font-family:var(--display);font-size:22px;margin:0;text-wrap:balance}
+.panel .tags{font:12px var(--mono);color:var(--muted)}
+.url{font:13px var(--mono);background:var(--chip);padding:8px 10px;border-radius:8px;word-break:break-all;user-select:all}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border:1px solid var(--line);background:var(--bg);color:var(--fg);font:500 14px var(--body);padding:10px;border-radius:8px;cursor:pointer;text-align:center;text-decoration:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.close{align-self:flex-end;border:0;background:none;color:var(--muted);font-size:14px;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:14px;z-index:30}
+@media (prefers-reduced-motion:reduce){.tile img{transition:none}}
+</style>
+</head>
+<body>
 
-  <body>
-    <p>
-      🤔
-      🤔
-      🙏
-      👍
-    </p>
-<textarea  rows="30" cols="200">
-  ಠ‸ಠ
+<header class="top"><div class="wrap">
+  <div class="row"><h1>meme<span>.</span>eq8</h1><span class="count" id="count"></span></div>
+  <div class="row">
+    <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Search memes: bear, merge, wtf…" autocomplete="off"><kbd>/</kbd></label>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Filter by mood"></div>
+</div></header>
 
-  ¯\_(ツ)_/¯
+<main><div class="wrap">
+  <section>
+    <h2>Faces to copy</h2>
+    <div class="kaos" id="kaos"></div>
+  </section>
+  <section>
+    <h2 id="gridTitle">All memes</h2>
+    <div class="grid" id="grid"></div>
+    <p class="empty" id="empty" hidden>No meme matches that. Try another word.</p>
+  </section>
+  <section class="links">
+    <h2>Videos</h2>
+    <a href="https://i.imgur.com/cWNo73N.mp4">Red panda jump video</a>
+  </section>
+</div></main>
 
-   (－‸ლ)
+<div class="shade" id="shade" hidden></div>
+<aside class="panel" id="panel" hidden aria-label="Meme details">
+  <button class="close" id="close">Close ✕</button>
+  <img id="pImg" alt="">
+  <h3 id="pName"></h3>
+  <div class="tags" id="pTags"></div>
+  <div class="url" id="pUrl"></div>
+  <div class="btns">
+    <button class="btn primary" id="cLink">Copy link</button>
+    <button class="btn" id="cMd">Copy Markdown</button>
+  </div>
+</aside>
+<div class="toast" id="toast" hidden></div>
 
+<script>
+const BASE = "https://meme.eq8.eu/";
+const CATS = [["all","All"],["yes","Yes and wins"],["no","No and rage"],["wtf","WTF"],["dev","Dev and git"],["wait","Waiting"],["fun","Fun"]];
+const KAOS = ["ಠ‸ಠ","¯\\_(ツ)_/¯","(－‸ლ)","(╯°□°)╯︵ ┻━┻","(⊙_ʘ)","( ͡° ͜ʖ ͡°)","\\(• ◡ •)/","( ‘-’)人(ﾟ_ﾟ )","(ಠ‿ಠ)","🤔","🙏","👍"];
 
-  (╯°□°)╯︵ ┻━┻
+// [file or full URL, name, mood, search tags]. Local files get a thumbnail from thumbs/.
+const MEMES = [
+  ["agree.png","I'm glad we all agree","yes","agree consensus"],
+  ["ok.jpg","Saitama OK","yes","ok fine one punch"],
+  ["https://imgflip.com/s/meme/Okay-Guy-Rage-Face.jpg","Okay guy","yes","ok okay"],
+  ["oh-yeah.gif","Oh yeah","yes","yes happy"],
+  ["excelent.jpg","Excellent","yes","raccoon excellent good"],
+  ["satisfaction.jpg","Satisfaction","yes","satisfied happy"],
+  ["success.jpg","Success quotes","yes","success motivation"],
+  ["take-my-money.gif","Shut up and take my money","yes","fry money buy"],
+  ["lemon.jpg","Easy peasy lemon squeezy","yes","easy simple"],
+  ["good-idea.png","Such a good idea","yes","idea sarcasm"],
+  ["https://media.giphy.com/media/e5PpBi9XlQn8A/giphy.gif","Join the party","yes","party join"],
+  ["https://media.giphy.com/media/xKy2w6LehxxHa/giphy.gif","Nod","yes","nod yes agree"],
+  ["nope.jpg","Nopezilla","no","nope no"],
+  ["flip.jpg","Table flip","no","angry flip rage"],
+  ["facepalm.jpg","Facepalm","no","facepalm stupid"],
+  ["come-on.jpg","Come on","no","come on annoyed"],
+  ["slap.gif","Slap","no","slap emoji"],
+  ["panda.gif","Angry panda","no","panda angry"],
+  ["bear2.jpg","Patient bear, out of patience","no","bear patience"],
+  ["fu2.jpg","FFFUUUU","no","rage fu"],
+  ["wtf.jpg","WTF llama","wtf","llama wtf"],
+  ["cat.jpg","WTF cat","wtf","cat wtf"],
+  ["what.jpg","What have I read","wtf","what read"],
+  ["noidea.jpg","I have no idea what I'm doing","wtf","dog no idea"],
+  ["zootopia-wtf.gif","Zootopia WTF","wtf","zootopia judy"],
+  ["wot.png","Wooot","wtf","wot surprised"],
+  ["c.jpg","It's complicated","wtf","complicated"],
+  ["https://media.giphy.com/media/VAJvLpyrgr3Og/giphy.gif","WTF","wtf","wtf"],
+  ["https://media.tenor.com/images/6d00211087795ffc805b34500663c2fa/tenor.gif","Travolta lost","wtf","travolta lost confused"],
+  ["https://i.imgur.com/UZ0LF5R.gif","Really?","wtf","really"],
+  ["merge.gif","Git merge","dev","git merge"],
+  ["rm.gif","sudo rm -rf /","dev","rm delete sudo linux"],
+  ["unit-test.jpg","Passing unit tests","dev","test titanic"],
+  ["feature.jpg","It's not a bug, it's a feature","dev","bug feature"],
+  ["stg.jpeg","I'm using staging","dev","staging spongebob deploy"],
+  ["hotwire.jpeg","Hotwire","dev","hotwire rails"],
+  ["vim.jpg","I use vim","dev","vim editor"],
+  ["fix.png","Fix computer","dev","fix computer"],
+  ["price-of-speed.png","Price of speed","dev","speed deadline cheetah"],
+  ["hostgator.gif","Your website problems","dev","hosting website"],
+  ["strategy.gif","Strategy cat","dev","strategy plan cat"],
+  ["fine.jpg","This is fine","dev","fire fine incident"],
+  ["https://preview.redd.it/4mrkpih7ok941.jpg?width=640&crop=smart&auto=webp&s=e5dce24afa463fb150c8a14f375870212ac7d24a","Meetings","dev","meetings"],
+  ["bear1.jpg","Patient bear","wait","bear patience wait"],
+  ["coffee.gif","Coffee","wait","coffee"],
+  ["so.jpg","So...","wait","so think"],
+  ["cow-lick.jpg","Cow lick","wait","cow"],
+  ["https://media.giphy.com/media/1Zbeweu52ZaQE/giphy.gif","Tumbleweed","wait","tumbleweed silence nobody"],
+  ["arguing-with-woman.jpg","Arguing with a woman","fun","license agreement i agree"],
+  ["unicorn.gif","Unicorn","fun","unicorn"],
+  ["nowkiss.jpg","Now kiss","fun","kiss"],
+  ["trap.jpg","It's a trap","fun","trap star wars"],
+  ["told-ya.gif","Told ya","fun","frozen anna told"],
+  ["rambo.webp","Rambo","fun","rambo"],
+  ["s.webp","Squirrel","fun","squirrel"],
+  ["d.jpg","Dangerous dog","fun","dog dangerous"],
+  ["https://media0.giphy.com/media/4pMX5rJ4PYAEM/source.gif","Disappear","fun","disappear hide"],
+  ["https://i.imgur.com/GmzdWQ8.gif","Creepy rabbit","fun","creepy rabbit"],
+  ["https://i.imgflip.com/3bhw2u.jpg","Imgflip meme","fun","imgflip"],
+  ["https://media.tenor.com/images/61277e504a36163efc660879be2eed79/tenor.gif","I lied","fun","lied lie"],
+  ["https://media1.giphy.com/media/3gNotAoIRZsb9UHPnj/giphy.gif","I lied 2","fun","lied lie"],
+  ["https://media.tenor.com/Eig2MlqCi3AAAAAM/michael-jackson-popcorn.gif","Popcorn","fun","popcorn michael jackson drama"],
+  ["https://media2.giphy.com/media/IThjAlJnD9WNO/200w.gif","Hello","fun","hello hi"],
+].map(([f,n,c,t]) => {
+  const ext = f.startsWith("http");
+  const url = ext ? f : BASE + f;
+  return { url, n, c, t, gif: /\.gif(\?|$)/.test(f) || /giphy|tenor/.test(f), thumb: ext ? f : "thumbs/" + f.replace(/\.[^.]+$/, ".webp") };
+});
 
-  (⊙_ʘ)
+let cat = "all", q = "", cur;
+const $ = id => document.getElementById(id);
 
+function toast(t){ const el=$("toast"); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,1400); }
+async function copy(text,label){ try{ await navigator.clipboard.writeText(text); toast(label+" copied"); }catch(e){ toast("Select the text and copy it by hand"); } }
 
-  (͡° ͜ʖ ͡°)
+KAOS.forEach(k => { const b=document.createElement("button"); b.className="kao"; b.textContent=k; b.onclick=()=>copy(k,k); $("kaos").append(b); });
+CATS.forEach(([id,label]) => { const b=document.createElement("button"); b.className="chip"; b.dataset.id=id; b.textContent=label; b.onclick=()=>{ cat=id; render(); }; $("chips").append(b); });
 
-
-  \(• ◡ •)/
-
-  ( ‘-’)人(ﾟ_ﾟ )
-
-  (ಠ‿ಠ)
-
-  (^_^) [o_o] (^.^)  (".") ($.$)
-
-</textarea>
-
-
-    <h2>Hosted</h2>
-    <img src="stg.jpeg" alt="staging in use">
-    <img src="hotwire.jpeg" alt=""> 
-    <img src="so.jpg" alt="so">
-    <img src="s.webp" alt="squirel" />
-    <img src="agree.png" alt="agree" />
-    <img src="cat.jpg" alt="wtf cat" />
-    <img src="wtf.jpg" alt="wtf lama" />
-    <img src="slap.gif" alt="slap emoji" />
-    <img src="noidea.jpg" alt="noidea" />
-    <img src="good-idea.png" alt="such a good idea" />
-    <img src="bear1.jpg" alt="patient bear" />
-    <img src="bear2.jpg" alt="patient bear out of patient" />
-    <img src="ok.jpg" alt="Saitama ok" />
-    <img src="https://imgflip.com/s/meme/Okay-Guy-Rage-Face.jpg" alt="ok meme" />
-    <img src="excelent.jpg" alt="excellent" />
-    <img src="nowkiss.jpg" alt="now kiss" />
-    <img src="facepalm.jpg" alt="facepalm" />
-    <img src="satisfaction.jpg" alt="satisfaction" />
-    <img src="flip.jpg" alt="flip" />
-    <img src="fine.jpg" alt="This is fine" />
-    <!-- <img src="fu.jpg" alt="FU cat" /> -->
-    <!-- <img src="fu2.jpg" alt="FUUUUUU" /> -->
-    <!-- <img src="fu.gif" alt="fu fu fu fu fu ..." /> -->
-    <img src="coffee.gif" alt="coffee" />
-    <img src="c.jpg" alt="I'ts complicated" />
-    <!-- <img src="nope.jpg" alt="nopezilla" /> -->
-    <img src="what.jpg" alt="What have I read" />
-    <img src="lemon.jpg" alt="now kiss" />
-    <img src="unit-test.jpg" alt="unit test" />
-    <img src="cow-lick.jpg" alt="cow lick" />
-    <img src="d.jpg" alt="Dangerouse dog" />
-    <img src="wot.png" alt="wooot" />
-    <img src="price-of-speed.png" alt="Price of speed" />
-    <img src="merge.gif" alt="git merge" />
-    <img src="take-my-money.gif" alt="Shut up and take my money" />
-    <img src="told-ya.gif" alt="Told ya frozen" />
-    <img src="rm.gif" alt="sudo rm" />
-    <img src="strategy.gif" alt="strategy cat" />
-    <img src="feature.jpg" alt="bugfeature" />
-    <img src="come-on.jpg" alt="come on" />
-    <img src="oh-yeah.gif" alt="oh yeah" />
-    <img src="panda.gif" alt="panda angry" />
-    <img src="hostgator.gif" alt="hostgator emo" />
-    <img src="zootopia-wtf.gif" alt="zootopa wtf" />
-    <img src="success.jpg" alt="success quotes" />
-    <img src="vim.jpg" alt="I use vim" />
-    <img src="trap.jpg" alt="it's a trap" />
-    <img src="rambo.webp" alt="rambo" />
-    <img src="fix.png" alt="fix computer" />
-    <img src="arguing-with-woman.jpg" alt="arguing with woman" />
-
-
-    <h2>3rd party</h2>
-    <img src="https://media.giphy.com/media/1Zbeweu52ZaQE/giphy.gif" alt="tumbleweed" />
-    <img src="https://media.tenor.com/images/6d00211087795ffc805b34500663c2fa/tenor.gif" alt="travolta-lost" />
-    <img src="https://media0.giphy.com/media/4pMX5rJ4PYAEM/source.gif" alt="disapear" />
-    <img src="https://i.imgur.com/GmzdWQ8.gif" alt="creepy rabit" />
-    <img src="https://i.imgflip.com/3bhw2u.jpg">
-    <img src="https://media.giphy.com/media/VAJvLpyrgr3Og/giphy.gif" alt="wtf"/>
-    <img src="https://preview.redd.it/4mrkpih7ok941.jpg?width=640&crop=smart&auto=webp&s=e5dce24afa463fb150c8a14f375870212ac7d24a" alt="meetings" />
-    <img src="https://media.giphy.com/media/e5PpBi9XlQn8A/giphy.gif" alt="join the party" />
-    <img src="https://media.giphy.com/media/xKy2w6LehxxHa/giphy.gif" alt="nod" />
-    <img src="https://i.imgur.com/UZ0LF5R.gif" alt="really?" />
-    <img src="https://media.tenor.com/images/61277e504a36163efc660879be2eed79/tenor.gif" alt="I lied" />
-    <img src="https://media1.giphy.com/media/3gNotAoIRZsb9UHPnj/giphy.gif?cid=6104955ejr0wnpi0gqm27wrdqtj46xcmqorut2x44pofam06&rid=giphy.gif&ct=g" alt="I lied" />
-    <img src="https://media.tenor.com/Eig2MlqCi3AAAAAM/michael-jackson-popcorn.gif" alt="popcorn" />
-    <img src="https://media2.giphy.com/media/IThjAlJnD9WNO/200w.gif?cid=6c09b952xllht3dh2vf1sgprfx9emkkc3zzbnoqprv7694yk&rid=200w.gif&ct=g" alt="hello" />
-
-
-    <a href="https://i.imgur.com/cWNo73N.mp4">Red Panda jump video</a>
-  </body>
+function render(){
+  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c.dataset.id===cat));
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  const list = MEMES.filter(m => (cat==="all" || m.c===cat) && words.every(w => (m.n+" "+m.t+" "+m.url).toLowerCase().includes(w)));
+  $("grid").replaceChildren(...list.map(m => {
+    const b=document.createElement("button"); b.className="tile"; b.title=m.n;
+    b.innerHTML=`<img loading="lazy" alt=""><span class="name"></span>${m.gif?'<span class="gif">GIF</span>':""}`;
+    b.querySelector("img").src=m.thumb; b.querySelector(".name").textContent=m.n; b.onclick=()=>open(m); return b;
+  }));
+  $("empty").hidden = list.length>0;
+  $("count").textContent = `${list.length} of ${MEMES.length}`;
+  $("gridTitle").textContent = CATS.find(c=>c[0]===cat)[1] + (q ? ` matching “${q}”` : "");
+}
+function open(m){ cur=m; $("pImg").src=m.url; $("pImg").alt=m.n; $("pName").textContent=m.n; $("pTags").textContent=m.t.split(" ").map(t=>"#"+t).join(" "); $("pUrl").textContent=m.url; $("panel").hidden=$("shade").hidden=false; $("cLink").focus(); }
+function close(){ $("panel").hidden=$("shade").hidden=true; }
+$("close").onclick=close; $("shade").onclick=close;
+$("cLink").onclick=()=>copy(cur.url,"Link");
+$("cMd").onclick=()=>copy(`![${cur.n}](${cur.url})`,"Markdown");
+$("q").addEventListener("input", e => { q=e.target.value.trim(); render(); });
+document.addEventListener("keydown", e => {
+  if(e.key==="/" && document.activeElement!==$("q")){ e.preventDefault(); $("q").focus(); }
+  if(e.key==="Escape") close();
+});
+render();
+</script>
+</body>
 </html>
